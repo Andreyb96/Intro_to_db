@@ -13,3 +13,27 @@
 		1.3.2. SELECT category, COUNT(*) FROM store GROUP BY category
 		1.3.3. select category, sum(sold_num * price) as summ from store group by category order by summ DESC limit 5;
 		1.3.4. select COUNT(project_name), SUM(budget), AVG(datediff(project_finish, project_start)) from project;
+2. Основы реляционных баз данных
+	2.1 Введение в реляционную модель данных
+		2.1.1. Процедурная часть
+		2.1.2. Нет
+		2.1.3. Тип данных или домен; Название
+		2.1.4. Схема отношения; Набор кортежей отношения
+		2.1.5. Простой; Потенциальный; Составной
+		2.1.6. Да
+	2.2 Архитектура ANSI/SPARC
+		2.2.1. Выделение набора независимых уровней представления о БД
+	2.3 Выборки из нескольких источников
+		2.3.1. SELECT good.name as productname, category.name as categoryname FROM good INNER JOIN category_has_good ON good.id = category_has_good.good_id INNER JOIN category ON category_has_good.category_id = category.id order by productname, categoryname;
+		2.3.2. select client.first_name, client.last_name, count(1) as new_sale_num from client inner join sale on sale.client_id = client.id inner join status on sale.status_id = status.id where status.name = 'new' group by client.first_name, client.last_name;
+		2.3.3. SELECT good.name AS good_name, category.name AS category_name FROM good LEFT OUTER JOIN category_has_good ON good.id = category_has_good.good_id LEFT OUTER JOIN category ON category_has_good.category_id = category.id;
+		2.3.4. select good.name as g, category.name as c from good left join category_has_good on good.id=category_has_good.good_id left join category on category_has_good.category_id=category.id union select good.name, category.name from good right join category_has_good on good.id=category_has_good.good_id right join category on category_has_good.category_id=category.id where good.name is null order by c, g;
+		2.3.5. SELECT source.name AS source_name, SUM(sale.sale_sum) AS sale_sum FROM source LEFT OUTER JOIN client ON source.id = client.source_id LEFT OUTER JOIN sale ON client.id = sale.client_id GROUP BY 1;
+		2.3.6. SELECT good.name AS good_name FROM good INNER JOIN category_has_good ON good.id = category_has_good.good_id INNER JOIN category ON category_has_good.category_id = category.id WHERE category.name = 'Cakes' UNION SELECT good.name AS good_name FROM good INNER JOIN sale_has_good   ON good.id = sale_has_good.good_id INNER JOIN sale   ON   sale_has_good.sale_id = sale.id INNER JOIN status ON sale.status_id = status.id WHERE status.name = 'delivering';
+		2.3.7. SELECT category.name AS name, COUNT(sale.id) AS sale_num FROM category LEFT OUTER JOIN category_has_good ON category.id = category_has_good.category_id LEFT OUTER JOIN good ON category_has_good.good_id = good.id LEFT OUTER JOIN sale_has_good ON good.id = sale_has_good.good_id LEFT OUTER JOIN sale ON sale_has_good.sale_id = sale.id GROUP BY category.name;
+		2.3.8. select sc.name from source sc where not exists (select ct.source_id from client ct where ct.source_id=sc.id) union select sc.name from source sc left join client ct on sc.id=ct.source_id left join sale sl on ct.id=sl.client_id left join status st on sl.status_id=st.id where st.name='rejected' group by sc.name
+	2.4 Триггеры и хранимые процедуры
+		2.4.1. Нет
+		2.4.2. Снижение временных затрат на передачу данных между БД и приложением; Повышение безопасности за счет ограничения набора операций с БД определенных пользователей; Повышение производительности в сравнении с реализацией процедурной обработки в приложении
+		2.4.3. Да
+	
